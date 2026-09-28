@@ -1,0 +1,81 @@
+{
+  "format": "dac-interstellar/source-fragment/v1",
+  "hash": "sha256",
+  "chunk_size": 2048,
+  "award_bytes": 23576,
+  "file_bytes": 24576,
+  "assignment": {
+    "sequence": 0,
+    "leaf": null
+  },
+  "ranges": [
+    {
+      "version": 1,
+      "source": "demo-prng",
+      "root": "0x201b447c6d5204fe65dac5059628b8d6f43ca2bdd25de81b54a030cfdb6f4e41",
+      "leaf_count": 37,
+      "anchor_tx": null,
+      "start": 30,
+      "end": 37,
+      "file_offset": 0,
+      "proof": [
+        {
+          "left": null,
+          "right": null
+        },
+        {
+          "left": "0x84f06b3c99614ec0b44ab1c7851a348d2086310b23cceff5d2663e746d968167",
+          "right": null
+        },
+        {
+          "left": "0x77b7cd77cf0e04ce6e3bf63e24da47a30cda811c83417992dcba42005102ad8d",
+          "right": null
+        },
+        {
+          "left": "0x198779553f91f1d9969404e1816fd0e2fbf223b929ebeeaeadc37f368ae41f5d",
+          "right": null
+        },
+        {
+          "left": "0x843d2f20da6067bd94ded736c70c1e4ce2c0916199397112cb4d5becd376774c",
+          "right": null
+        },
+        {
+          "left": null,
+          "right": null
+        }
+      ]
+    },
+    {
+      "version": 2,
+      "source": "demo-prng",
+      "root": "0x3a5cb0a42ce1b9c41184ad6786682e2746f8237e8abbb1790854a6de243ae54f",
+      "leaf_count": 21,
+      "anchor_tx": null,
+      "start": 0,
+      "end": 5,
+      "file_offset": 14336,
+      "proof": [
+        {
+          "left": null,
+          "right": "0x82b54c16d5d237bf95db82d06bbf493a29f302d0dcc50f26a3af746fb773f232"
+        },
+        {
+          "left": null,
+          "right": "0xb07981cd1a331323f38119bb910a7448f5944ec91dee5fa1bbbb3392642e6b62"
+        },
+        {
+          "left": null,
+          "right": null
+        },
+        {
+          "left": null,
+          "right": "0x674cc6a81952180f886b7a9ddc3c0e2e11a9f240800f77c78150ea2cf805ec11"
+        },
+        {
+          "left": null,
+          "right": "0x0ef7c0162e3047e6672763feee76f9307103cd1d315495aff67cfa0a82f42032"
+        }
+      ]
+    }
+  ]
+}

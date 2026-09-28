@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Fragment Maze</title>
+  <meta name="description" content="A labyrinth carved by your Source Fragment mixed with your device's randomness.">
+  <link rel="stylesheet" href="assets/style.css">
+  <style>
+    .layout { display: grid; gap: 18px; grid-template-columns: minmax(0, 1fr); }
+    @media (min-width: 860px) { .layout { grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); } }
+    #board { width: 100%; height: auto; aspect-ratio: 1; touch-action: none; border-radius: var(--radius); }
+    .pad { display: grid; grid-template-columns: repeat(3, 56px); gap: 6px; justify-content: center; margin-top: 12px; }
+    .pad button { height: 48px; padding: 0; font-size: 1.2rem; }
+    .pad .up { grid-column: 2; } .pad .left { grid-column: 1; grid-row: 2; } .pad .down { grid-column: 2; grid-row: 2; } .pad .right { grid-column: 3; grid-row: 2; }
+    @media (hover: hover) and (pointer: fine) { .pad { display: none; } }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <h1>Maze</h1>
+    <p class="lede">Every new maze spends 32 bytes of your fragment, mixed with 32 bytes from your device, to carve the corridors. Reach the glowing corner. Arrow keys or WASD; swipe or use the pad on a phone.</p>
+    <div class="layout">
+      <section class="card" style="padding:10px">
+        <canvas id="board" width="880" height="880" aria-label="Maze"></canvas>
+        <div class="pad" aria-label="Move">
+          <button class="up" data-dir="up" aria-label="Up">↑</button>
+          <button class="left" data-dir="left" aria-label="Left">←</button>
+          <button class="down" data-dir="down" aria-label="Down">↓</button>
+          <button class="right" data-dir="right" aria-label="Right">→</button>
+        </div>
+      </section>
+      <div>
+        <section class="card">
+          <h2>Your fragment</h2>
+          <div id="loader"></div>
+          <div id="status" style="margin-top:12px"></div>
+        </section>
+        <section class="card stack">
+          <div class="row">
+            <label for="size">Size</label>
+            <select id="size"><option value="11">Small</option><option value="19" selected>Medium</option><option value="29">Large</option></select>
+            <button class="primary" id="new" disabled>New maze</button>
+          </div>
+          <div class="grid" style="grid-template-columns: 1fr 1fr">
+            <div><div class="small muted">Time</div><div class="stat" id="time">0.0 s</div></div>
+            <div><div class="small muted">Moves</div><div class="stat" id="moves">0</div></div>
+          </div>
+          <p id="message" class="small muted" aria-live="polite">Load a fragment to carve your first maze.</p>
+        </section>
+      </div>
+    </div>
+  </main>
+  <script type="module" src="pages/maze.js"></script>
+</body>
+</html>

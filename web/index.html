@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Source Fragment Lab</title>
+  <meta name="description" content="Verify and explore a Source Fragment — quantum entropy won on DAC Interstellar — entirely in your browser.">
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+  <main class="wrap">
+    <h1>Source Fragment Lab</h1>
+    <p class="lede">Load the quantum entropy you won on DAC Interstellar, check it against the chain, look inside it, then put it to work in the games. Everything runs in this page; your file is never uploaded.</p>
+    <p class="rule"><strong>The one rule.</strong> <span id="rule"></span></p>
+
+    <section class="card">
+      <h2>1 · Load your fragment</h2>
+      <div id="loader"></div>
+      <div id="status" style="margin-top:12px"></div>
+    </section>
+
+    <section class="card" id="verify-card">
+      <h2>2 · Verify it</h2>
+      <p class="small muted">Rebuilds every Merkle root from your own bytes, then asks DAC mainnet what root it anchored for that reservoir version (<code>rootOf</code> on <code id="anchor"></code>).</p>
+      <div class="row"><button class="primary" id="verify" disabled>Verify</button><span id="verify-note" class="small muted">Load a fragment and its proof.json first.</span></div>
+      <div class="meter" style="margin-top:12px"><div id="verify-bar"></div></div>
+      <ul class="status-list" id="verify-out" style="margin-top:8px"></ul>
+    </section>
+
+    <section class="card">
+      <h2>3 · Look inside</h2>
+      <p class="small muted">Good entropy looks boring: a flat histogram, close to 8 bits per byte, about half the bits set. These are sanity checks, not proof of randomness.</p>
+      <canvas id="histogram" width="768" height="180" aria-label="Byte value histogram"></canvas>
+      <div class="grid" id="stats" style="margin-top:14px"></div>
+    </section>
+
+    <section>
+      <h2>4 · Use it</h2>
+      <div class="grid games">
+        <a class="card" href="dice.html"><h3>Quantum dice</h3><p>Every roll mixes your fragment with your device's randomness.</p></a>
+        <a class="card" href="starmap.html"><h3>Star map</h3><p>Turn one chunk into a constellation you can export.</p></a>
+        <a class="card" href="maze.html"><h3>Maze</h3><p>A fresh labyrinth from mixed entropy. Find the exit.</p></a>
+        <a class="card" href="draw.html"><h3>Verifiable draw</h3><p>Run a giveaway anyone can re-check, or check someone else's.</p></a>
+      </div>
+    </section>
+  </main>
+  <script type="module" src="pages/lab.js"></script>
+</body>
+</html>

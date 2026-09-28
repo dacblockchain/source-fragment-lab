@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Quantum Dice</title>
+  <meta name="description" content="Dice and coins rolled from your Source Fragment mixed with your device's randomness.">
+  <link rel="stylesheet" href="assets/style.css">
+  <style>
+    .tray { display: flex; flex-wrap: wrap; gap: 12px; min-height: 96px; align-items: center; }
+    .die {
+      width: 78px; height: 78px; border-radius: 14px; display: grid; place-items: center;
+      background: var(--surface-2); border: 1px solid var(--border); position: relative;
+      font-family: var(--font-display); font-size: 1.8rem;
+    }
+    .die small { position: absolute; top: 5px; left: 8px; font: 600 0.7rem var(--font-body); color: var(--muted); }
+    .die.coin { border-radius: 50%; font-size: 1rem; text-transform: uppercase; }
+    .die.max { border-color: var(--accent); color: var(--accent); }
+    .die.rolling { animation: tumble 0.55s cubic-bezier(.3,1.4,.5,1); }
+    @keyframes tumble {
+      0% { transform: rotate(-200deg) scale(0.4); opacity: 0; }
+      100% { transform: rotate(0) scale(1); opacity: 1; }
+    }
+    .kinds button[aria-pressed='true'] { background: var(--accent); color: var(--accent-text); border-color: var(--accent); }
+    #history li { font-family: var(--font-mono); font-size: 0.85rem; }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <h1>Quantum dice</h1>
+    <p class="lede">Each roll takes 32 fresh bytes of your fragment and 32 bytes from your device, runs them through HKDF, and turns the result into unbiased dice with rejection sampling. No byte of your fragment is ever used twice.</p>
+
+    <section class="card" id="load-card">
+      <h2>Your fragment</h2>
+      <div id="loader"></div>
+      <div id="status" style="margin-top:12px"></div>
+    </section>
+
+    <section class="card stack">
+      <div class="row kinds" id="kinds" role="group" aria-label="Die"></div>
+      <div class="row">
+        <label for="count">How many</label>
+        <input id="count" type="number" min="1" max="20" value="2" style="width:5rem">
+        <button class="primary" id="roll" disabled>Roll</button>
+        <span id="total" class="stat"></span>
+      </div>
+      <div class="tray" id="tray" aria-live="polite"><p class="muted">Load a fragment, pick a die, roll.</p></div>
+    </section>
+
+    <section class="card">
+      <h2>History</h2>
+      <ol id="history" class="small" reversed></ol>
+    </section>
+  </main>
+  <script type="module" src="pages/dice.js"></script>
+</body>
+</html>

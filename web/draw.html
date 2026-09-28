@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Verifiable Draw</title>
+  <meta name="description" content="Run or check a giveaway draw from a committed Source Fragment chunk and a future DAC block hash.">
+  <link rel="stylesheet" href="assets/style.css">
+  <style>
+    .tabs button[aria-selected='true'] { background: var(--accent); color: var(--accent-text); border-color: var(--accent); }
+    .field { display: grid; gap: 4px; margin-bottom: 12px; }
+    #winners li, #run-winners li { font-family: var(--font-display); font-size: 1.1rem; }
+    .kv { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 4px 12px; font-size: 0.88rem; }
+    .kv dt { color: var(--muted); } .kv dd { margin: 0; }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <h1>Verifiable draw</h1>
+    <p class="lede">A giveaway anyone can re-check. The organizer commits to one fragment chunk <em>before</em> entries close; the winners are then fixed by that chunk plus the hash of a DAC mainnet block mined <em>after</em> the close. Nobody knows both in advance. Full procedure: <a href="https://github.com/dacblockchain/source-fragment-lab/blob/main/docs/draw.md">docs/draw.md</a>.</p>
+    <div class="row tabs" role="tablist" style="margin-bottom:16px">
+      <button role="tab" aria-selected="true" data-tab="verify">Check a draw</button>
+      <button role="tab" aria-selected="false" data-tab="run">Run a draw</button>
+    </div>
+
+    <section class="card" id="tab-verify">
+      <h2>Check someone's draw</h2>
+      <div class="field"><label for="v-transcript">Load a transcript (.json) — optional</label><input id="v-transcript" type="file" accept=".json,application/json"></div>
+      <div class="field"><label for="v-chunk">Revealed chunk (hex, 2,048 bytes)</label><textarea id="v-chunk" rows="4" spellcheck="false"></textarea></div>
+      <div class="field"><label for="v-commit">Announced commitment (SHA-256 of the chunk, optional)</label><input id="v-commit" class="mono" spellcheck="false" placeholder="0x…"></div>
+      <div class="row field">
+        <label for="v-height">Block height</label><input id="v-height" type="number" min="0" style="width:10rem">
+        <button id="v-fetch" type="button">Fetch hash from DAC mainnet</button>
+      </div>
+      <div class="field"><label for="v-hash">Block hash</label><input id="v-hash" class="mono" spellcheck="false" placeholder="0x…"></div>
+      <div class="field"><label for="v-entries">Entries, one per line, as published</label><textarea id="v-entries" rows="8"></textarea></div>
+      <div class="row field"><label for="v-k">Winners</label><input id="v-k" type="number" min="1" value="1" style="width:6rem"><button class="primary" id="v-run" type="button">Recompute</button></div>
+      <ul class="status-list" id="v-out"></ul>
+      <ol id="winners"></ol>
+    </section>
+
+    <section class="card" id="tab-run" hidden>
+      <h2>Run your own draw</h2>
+      <div id="loader"></div>
+      <div id="status" style="margin-top:12px"></div>
+      <h3 style="margin-top:20px">Step 1 · Reserve a chunk and announce it</h3>
+      <p class="small muted">Reserves the next whole unused chunk of your fragment. It will become public when you reveal it, so it is marked used and never feeds a secret.</p>
+      <button id="r-reserve" disabled>Reserve chunk</button>
+      <dl class="kv" id="r-announce" style="margin-top:12px"></dl>
+      <h3 style="margin-top:20px">Step 2 · After entries close and block H is mined</h3>
+      <div class="row field"><label for="r-height">Block height H</label><input id="r-height" type="number" min="0" style="width:10rem"></div>
+      <div class="field"><label for="r-entries">Entries, one per line</label><textarea id="r-entries" rows="8"></textarea></div>
+      <div class="row field"><label for="r-k">Winners</label><input id="r-k" type="number" min="1" value="1" style="width:6rem"><button class="primary" id="r-run" type="button" disabled>Draw</button></div>
+      <p id="r-note" class="small muted"></p>
+      <ol id="run-winners"></ol>
+      <a class="button" id="r-transcript" hidden>Download transcript</a>
+    </section>
+  </main>
+  <script type="module" src="pages/draw.js"></script>
+</body>
+</html>

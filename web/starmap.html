@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Fragment Star Map</title>
+  <meta name="description" content="A generative star map drawn deterministically from one chunk of your Source Fragment.">
+  <link rel="stylesheet" href="assets/style.css">
+  <style>
+    #sky { width: 100%; height: auto; aspect-ratio: 1; border-radius: var(--radius); border: 1px solid var(--border); background: #03060d; }
+    .layout { display: grid; gap: 18px; grid-template-columns: minmax(0, 1fr); }
+    @media (min-width: 860px) { .layout { grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); } }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <h1>Star map</h1>
+    <p class="lede">One 2,048-byte chunk becomes one sky: star positions, colours, nebulae and constellations all come from its bytes, so the same chunk always draws the same map.</p>
+
+    <div class="layout">
+      <section class="card" style="padding:10px">
+        <canvas id="sky" width="1200" height="1200" aria-label="Generated star map"></canvas>
+        <p id="caption" class="small muted mono" style="margin:8px 4px 0"></p>
+      </section>
+      <div>
+        <section class="card">
+          <h2>Your fragment</h2>
+          <div id="loader"></div>
+          <div id="status" style="margin-top:12px"></div>
+        </section>
+        <section class="card stack">
+          <button class="primary" id="next" disabled>Draw a new sky</button>
+          <p class="small muted">Takes the next unused chunk and marks it used: once you share the picture, treat those bytes as public, so they must never also go into a key.</p>
+          <div class="row">
+            <label for="index">Re-draw chunk #</label>
+            <input id="index" type="number" min="0" value="0" style="width:6rem">
+            <button id="redraw" disabled>Re-draw</button>
+          </div>
+          <p class="small muted">Re-drawing a chunk you already used shows the map is reproducible. Only chunks that are already used can be re-drawn.</p>
+          <a class="button" id="download" download="star-map.png" aria-disabled="true">Export PNG</a>
+        </section>
+        <section class="card small muted">
+          <strong>Why raw bytes here?</strong> Art is meant to be seen, not kept secret, and mixing in your device's randomness would make the map impossible to reproduce. So this page uses the chunk as-is, expanded with HKDF. That is the exception to the rule, not the rule.
+        </section>
+      </div>
+    </div>
+  </main>
+  <script type="module" src="pages/starmap.js"></script>
+</body>
+</html>

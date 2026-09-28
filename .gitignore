@@ -1,0 +1,15 @@
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+.coverage
+htmlcov/
+dist/
+node_modules/
+# your own fragments, keys and cursors never belong in git
+*.cursor
+*.cursor.*.tmp
+*.cursor.lock
+*.key
+*.agekey
+source-fragment-*.bin

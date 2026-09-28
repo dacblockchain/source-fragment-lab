@@ -1,0 +1,43 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  python:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: ["3.10", "3.13"]
+    defaults:
+      run:
+        working-directory: python
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: ${{ matrix.python }}
+      - run: uv sync
+      - run: uv run pytest --cov=fragmentlab --cov-fail-under=85
+
+  web:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node --test 'web/tests/*.test.mjs'
+      - run: cmp testdata/demo-fragment.bin web/demo/demo-fragment.bin && cmp testdata/demo-fragment.proof.json web/demo/demo-fragment.proof.json
+
+  reference-verifier:
+    # The demo fragment must also pass the verifier Interstellar publishes itself.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 tools/verify_reference.py testdata/demo-fragment.bin testdata/demo-fragment.proof.json
