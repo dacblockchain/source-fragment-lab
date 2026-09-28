@@ -20,3 +20,11 @@ What a Source Fragment gives you is **provenance**: the proof shows that the byt
 ## Reporting a problem
 
 Please do not open a public issue for a vulnerability. Email **info@dachain.tech** with the details, and we will reply within a few working days.
+
+## Who can run CI and deploy
+
+CI runs on DAC's own infrastructure, so it is not open to everyone:
+
+- Workflows start only for GitHub accounts listed in the repository variable `CI_ALLOWED_ACTORS`, which only maintainers can change.
+- Pull requests from forks are welcome, but they never run CI directly. A maintainer reviews the change and runs it from a branch of this repository.
+- Publishing the site to GitHub Pages needs, in addition, an explicit approval from a maintainer.

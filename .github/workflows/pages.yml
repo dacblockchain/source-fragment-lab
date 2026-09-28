@@ -18,7 +18,9 @@ concurrency:
 
 jobs:
   deploy:
-    if: ${{ !github.event.repository.private }}
+    # Public repositories only, for allow-listed people only (see ci.yml), and the
+    # github-pages environment additionally requires a maintainer's approval.
+    if: ${{ !github.event.repository.private && contains(fromJSON(vars.CI_ALLOWED_ACTORS || '[]'), github.actor) && contains(fromJSON(vars.CI_ALLOWED_ACTORS || '[]'), github.triggering_actor) }}
     runs-on: self-hosted
     environment:
       name: github-pages

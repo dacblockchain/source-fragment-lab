@@ -8,13 +8,22 @@ on:
 permissions:
   contents: read
 
-# Every job runs on the organisation's self-hosted runner. That runner also
-# deploys other DAC services, so a pull request from a fork never reaches it:
-# the jobs are skipped, and a maintainer must review the change and push it to a
-# branch of this repository before CI runs on it.
+# Every job runs on the organisation's self-hosted runner, and only for people
+# listed in the repository variable CI_ALLOWED_ACTORS (a JSON array of GitHub
+# logins, editable by admins only). Both the actor and whoever re-ran the job
+# must be on the list. Pull requests from forks never run here: a maintainer
+# reviews the change and pushes it to a branch of this repository first.
 jobs:
+  gate:
+    if: ${{ (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) && contains(fromJSON(vars.CI_ALLOWED_ACTORS || '[]'), github.actor) && contains(fromJSON(vars.CI_ALLOWED_ACTORS || '[]'), github.triggering_actor) }}
+    runs-on: self-hosted
+    steps:
+      - run: echo "CI allowed for $ACTOR"
+        env:
+          ACTOR: ${{ github.triggering_actor }}
+
   python:
-    if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
+    needs: gate
     runs-on: self-hosted
     strategy:
       max-parallel: 1
@@ -32,7 +41,7 @@ jobs:
       - run: uv run pytest --cov=fragmentlab --cov-fail-under=85
 
   web:
-    if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
+    needs: gate
     runs-on: self-hosted
     steps:
       - uses: actions/checkout@v4
@@ -45,7 +54,7 @@ jobs:
 
   reference-verifier:
     # The demo fragment must also pass the verifier Interstellar publishes itself.
-    if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
+    needs: gate
     runs-on: self-hosted
     steps:
       - uses: actions/checkout@v4
