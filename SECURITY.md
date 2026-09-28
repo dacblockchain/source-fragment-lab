@@ -19,4 +19,4 @@ What a Source Fragment gives you is **provenance**: the proof shows that the byt
 
 ## Reporting a problem
 
-Please do not open a public issue for a vulnerability. Email **security@dachain.tech** with the details, and we will reply within a few working days.
+Please do not open a public issue for a vulnerability. Email **info@dachain.tech** with the details, and we will reply within a few working days.

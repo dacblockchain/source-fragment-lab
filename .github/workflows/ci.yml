@@ -8,10 +8,16 @@ on:
 permissions:
   contents: read
 
+# Every job runs on the organisation's self-hosted runner. That runner also
+# deploys other DAC services, so a pull request from a fork never reaches it:
+# the jobs are skipped, and a maintainer must review the change and push it to a
+# branch of this repository before CI runs on it.
 jobs:
   python:
-    runs-on: ubuntu-latest
+    if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
+    runs-on: self-hosted
     strategy:
+      max-parallel: 1
       matrix:
         python: ["3.10", "3.13"]
     defaults:
@@ -19,25 +25,29 @@ jobs:
         working-directory: python
     steps:
       - uses: actions/checkout@v4
-      - uses: astral-sh/setup-uv@v6
+      - uses: astral-sh/setup-uv@v5
         with:
           python-version: ${{ matrix.python }}
-      - run: uv sync
+      - run: uv sync --locked
       - run: uv run pytest --cov=fragmentlab --cov-fail-under=85
 
   web:
-    runs-on: ubuntu-latest
+    if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
+    runs-on: self-hosted
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 22
       - run: node --test 'web/tests/*.test.mjs'
-      - run: cmp testdata/demo-fragment.bin web/demo/demo-fragment.bin && cmp testdata/demo-fragment.proof.json web/demo/demo-fragment.proof.json
+      - name: Demo files in web/ must match testdata/
+        run: cmp testdata/demo-fragment.bin web/demo/demo-fragment.bin && cmp testdata/demo-fragment.proof.json web/demo/demo-fragment.proof.json
 
   reference-verifier:
     # The demo fragment must also pass the verifier Interstellar publishes itself.
-    runs-on: ubuntu-latest
+    if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
+    runs-on: self-hosted
     steps:
       - uses: actions/checkout@v4
-      - run: python3 tools/verify_reference.py testdata/demo-fragment.bin testdata/demo-fragment.proof.json
+      - uses: astral-sh/setup-uv@v5
+      - run: uv run --no-project python tools/verify_reference.py testdata/demo-fragment.bin testdata/demo-fragment.proof.json
